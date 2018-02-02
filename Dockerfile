@@ -27,11 +27,14 @@ RUN chmod +x /usr/local/bin/docker-entrypoint
 
 ENTRYPOINT ["docker-entrypoint"]
 
+CMD ["celery","worker"]
+
 WORKDIR /usr/src/celery
 
-ENV CELERY_BROKER_URL amqp://guest@rabbit
+#ENV CELERY_BROKER_URL amqp://guest@rabbit
 
-EXPOSE 5555
+# flower port,uwsgi port
+EXPOSE 5555 6000
 
 #ENTRYPOINT ["uwsgi --socket :6000 --master --processes 4 --threads 2 --vhost --pidfile=/var/run/uwsgi.pid --vacuum --thunder-lock"]
 #CMD ["--socket :6000 --master --processes 4 --threads 2 --vhost --pidfile=/var/run/uwsgi.pid --vacuum --thunder-lock"]
