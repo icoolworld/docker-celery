@@ -1,0 +1,17 @@
+#!/bin/sh
+set -ex
+
+# start uwsgi
+uwsgi --ini /etc/uwsgi.ini
+
+# start celery worker service
+#celery worker -l info &
+
+# start celery beat service
+celery beat -l info --scheduler djcelery.schedulers:DatabaseScheduler &
+
+# start celery flower service
+#celery flower --address=0.0.0.0 --port=5555 --broker=CELERY_BROKER_URL
+celery flower --address=0.0.0.0 --port=5555
+
+exec celery worker -l info

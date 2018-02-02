@@ -20,5 +20,18 @@ apk add --no-cache linux-headers \
 && pip install django-celery-beat \
 && apk del musl-dev gcc linux-headers git
 
+COPY docker-entrypoint /usr/local/bin/
+COPY uwsgi.ini /etc/uwsgi.ini
+
+RUN chmod +x /usr/local/bin/docker-entrypoint
+
+ENTRYPOINT ["docker-entrypoint"]
+
+WORKDIR /usr/src/celery
+
+ENV CELERY_BROKER_URL amqp://guest@rabbit
+
+EXPOSE 5555
+
 #ENTRYPOINT ["uwsgi --socket :6000 --master --processes 4 --threads 2 --vhost --pidfile=/var/run/uwsgi.pid --vacuum --thunder-lock"]
 #CMD ["--socket :6000 --master --processes 4 --threads 2 --vhost --pidfile=/var/run/uwsgi.pid --vacuum --thunder-lock"]
