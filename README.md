@@ -58,8 +58,9 @@ server {
 ```
 
 ## 启动celery容器
+-A task表示执行task应用
 ```
-docker run -d --name celery -p 5555:5555 -p 6000:6000 -v /home/wwwroot/uniii/task-schedule/:/usr/src/celery/ ainow/celery
+docker run -d --name celery -p 5555:5555 -p 6000:6000 -v /home/wwwroot/uniii/task-schedule/:/usr/src/celery/ ainow/celery -A task
 ```
 ### 部署celery静态资源
 ```
