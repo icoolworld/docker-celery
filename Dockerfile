@@ -2,9 +2,9 @@ FROM python:3.6.4-alpine3.7
 MAINTAINER coolbaby "coolbaby"
 
 RUN \
-apk add --no-cache linux-headers \
+apk add --no-cache curl linux-headers \
 && apk add --no-cache musl-dev gcc git \
-&& pip install celery==4.1.0 \
+#&& pip install celery==4.0.2 \
 && pip install redis auth msgpack \
 #&& pip install "celery[redis,auth,msgpack]"
 \
@@ -18,16 +18,20 @@ apk add --no-cache linux-headers \
 && pip install flower \
 && pip install -U uwsgi \
 && pip install django-celery-beat \
+&& pip install celery==4.0.2 \
 && apk del musl-dev gcc linux-headers git
 
 COPY docker-entrypoint /usr/local/bin/
 COPY uwsgi.ini /etc/uwsgi.ini
 
+#fix celery beat can not auto run when add some task in django admin ui
+COPY ok_beat.py /usr/local/lib/python3.6/site-packages/celery/beat.py
+
 RUN chmod +x /usr/local/bin/docker-entrypoint
 
 ENTRYPOINT ["docker-entrypoint"]
 
-CMD ["celery","worker"]
+#CMD ["celery","worker"]
 
 WORKDIR /usr/src/celery
 
