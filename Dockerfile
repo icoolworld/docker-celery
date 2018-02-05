@@ -2,7 +2,9 @@ FROM python:3.6.4-alpine3.7
 MAINTAINER coolbaby "coolbaby"
 
 RUN \
-apk add --no-cache curl linux-headers \
+apk add --no-cache tzdata \
+&& cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+&& apk add --no-cache curl linux-headers \
 && apk add --no-cache musl-dev gcc git \
 #&& pip install celery==4.0.2 \
 && pip install redis auth msgpack \
